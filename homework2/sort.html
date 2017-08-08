@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <p>冒泡排序</p>
+    <span>排序的值:</span>
+    <span class="val"></span>
+    <button> 点击排序</button>
+    <span>排序结果:</span>
+    <span class="res"></span>
+    <script>
+    var arr = [23,213,4,12,5,2,5,646,45,7,231,23,244];
+
+    var val = document.querySelector('.val'),
+        res = document.querySelector('.res'),
+        btn = document.querySelector('button'),w;
+        val.innerHTML = arr;
+
+
+    function show () {
+        if(typeof(w) == "undefined"){
+            w = new Worker("./sort.js");
+            w.onmessage = function (event) {
+                res.innerHTML = event.data;
+            };
+        }
+    }
+
+    btn.onclick = function() {
+        show();
+    }
+</script>
+</body>
+</html>
