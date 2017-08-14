@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+        <input type="file" class='uploads' name='pic' id='uploadImage'>
+        <img src="" class='Img'>
+        <p>
+        <button class='btn'>点击上传</button>      
+        <p>
+        <progress class='pro' value='0' max='100'></progress>
+</body>
+</html>
+<script>    
+
+//日哦 自慰版的 
+//base64传输要崩 ajax请求一直为pending
+var pro = document.querySelector('.pro'),
+    img = document.querySelector('.Img'),
+    btn = document.querySelector('.btn'),
+    file = document.getElementById('uploadImage'),
+    formData= new FormData();
+
+    var curr = 0,
+        frag = 1024 * 10,
+        i = 0;
+
+    btn.addEventListener('click',function() {
+        if(btn.innerText == '点击上传'){
+            formData.append('file',file.files[0]);
+            ajax(formData);
+            var timer = setInterval(function() {
+            if(i < 100) {
+                i++;
+            }else {
+                clearInterval(timer);
+            }
+            pro.value = i;
+            },40)
+            btn.innerText = '点击暂停';
+        }else {
+            btn.innerText = '点击上传';
+            clearInterval(timer);
+        }
+ 
+    })
+    
+      
+
+    function ajax(data) {
+        var xhr = new XMLHttpRequest();
+        // xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset:utf8"); 
+        xhr.open('post','./uploads',true);
+        xhr.send(data);
+    }
+
+</script>
+
+
+
+
+
+
+
