@@ -6,14 +6,13 @@ const path = require('path');
 const upload = require('multer')({
      dest: 'uploads/'
 });
+
 const fs = require('fs');
 const bodyParser = require('body-parser');
 
 app.set('view engine','ejs');
 app.set('Content-Type','text/plain');
-
 app.use(express.static('./public'));
-
 app.get('/',(req,res) => {
     res.render('index');
     res.end();
