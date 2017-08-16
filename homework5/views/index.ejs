@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href=""> -->
+    <style>
+    header {
+        width: 100%;
+        height: 30px;
+    }
+    header button {
+        width:50px;
+        height: 100%;
+        background-color: pink;
+        /* color: pink; */
+    }
+    .content{
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        height: 50px;
+        background-color: skyblue;
+    }
+    .input{
+        height: 100%;
+        width: 400px;
+        background-color: skyblue;
+        float: left;
+        padding: 0px
+    }
+    .btn {
+        height: 100%;
+        width: 150px;
+        float: right;
+    }
+    .sign {
+        position: relative;
+        margin: 50px auto;
+        width: 300px;
+        height: 200px;
+        display: none;
+        background-color: pink;
+    }
+    .sign div{
+        width: 100%;
+        height: 40px;
+        margin: 20 auto;
+        font-size: 20px;
+        line-height: 40px;
+    }
+    .sign input {
+        height: 25px;
+        width: 150px;
+    }
+    .btnSign {
+        width: 50px;
+        height: 30px;
+        background-color: skyblue;
+    }
+    .sign .close {
+        position: absolute;
+        top:10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        padding: 0px;
+        background-color:skyblue;
+        font-size: 14px;
+        text-align: center;
+        line-height: 20px;
+    }
+
+
+    .login {
+        position: relative;
+        margin: 50px auto;
+        width: 300px;
+        height: 200px;
+        display: none;
+        background-color: pink;
+    }
+    .login div{
+        width: 100%;
+        height: 40px;
+        margin: 20 auto;
+        font-size: 20px;
+        line-height: 40px;
+    }
+    .login input {
+        height: 25px;
+        width: 150px;
+    }
+    .btnLog {
+        width: 50px;
+        height: 30px;
+        background-color: skyblue;
+    }
+    .login .closeLog {
+        position: absolute;
+        top:10px;
+        right: 10px;
+        width: 20px;
+        height: 20px;
+        padding: 0px;
+        background-color:skyblue;
+        font-size: 14px;
+        text-align: center;
+        line-height: 20px;
+    }
+    ul {
+        list-style: none;
+        position: absolute;
+        top: 50px;
+        left: 50px;
+    }
+    ul li {
+        background-color: pink;
+        margin: 5px;
+    }
+    .online {
+        position: absolute;
+        top: 30px;
+        left: 300px;
+        overflow: hidden;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <button class='zhuce'>注册</button>
+        <button class='denglu'>登陆</button>
+        <span class='online'></span>
+    </header>
+    <div class="sign">
+        <div><span>用户名</span><input type="text" class='username'></div>
+        <div><span>密码 : </span><input type="text" class='password'></div>
+        <button class='btnSign'>注册</button>
+        <button class="close">X</button>
+    </div>
+    <div class="login">
+            <div><span>用户名</span><input type="text" class='loginName'></div>
+            <div><span>密码 : </span><input type="text" class='loginPwd'></div>
+            <button class='btnLog'>登录</button>
+            <button class="closeLog">X</button>
+    </div>
+    <ul class='lists'>
+
+    </ul>
+    <div class="content">
+        <input type="textarea" class='input'>
+        <button class='btn'>点击发送</button>
+    </div>
+</body>
+</html>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    //ajax
+    function ajax(url,data,callback) {
+        let xhr = new XMLHttpRequest();
+        xhr.open('post',url,true);
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4) {
+                if(xhr.status === 200) {
+                    callback(xhr.responseText);
+                } 
+            }
+        }
+        xhr.setRequestHeader("Content-type","application/json; charset=utf-8");
+        xhr.send(data);
+    } 
+    //$
+    function $(id) {
+        var dom = document.querySelectorAll(id);
+        return dom.length === 1 ? document.querySelector(id) : dom;
+    }    
+    //dom
+    var username = $('.username'),
+        password = $('.password'),
+        pwd = $('.pwd'),
+        btnSign = $('.btnSign'),
+        zhuce = $('.zhuce'),
+        denglu = $('.denglu'),
+        sign = $('.sign'),
+        btnLog = $('.btnLog'),
+        login = $('.login'),
+        loginName = $('.loginName'),
+        loginPwd = $('.loginPwd'),
+        close = $('.close'),
+        closeLog = $('.closeLog'),
+        input = $('.input'),
+        btn = $('.btn'),
+        lists = $('.lists'),
+        online = $('.online');
+
+
+    //click
+        btnSign.addEventListener('click',() => {
+            var userValue = username.value,
+                pwdValue = password.value;
+                ajax('./sign',JSON.stringify({
+                    'username': userValue,
+                    'password': pwdValue
+                }),
+                function(text) {
+                    if(text) {
+                        alert('success');
+                        sign.style.display = 'none';
+                    }else {
+                        alert('sign fail');
+                    }
+                })
+        })
+
+    //封装的click
+        function addClick(dom1,dom2,dis){
+            dom1.addEventListener('click',function() {
+                dom2.style.display = dis;
+            })
+        }
+
+        addClick(zhuce,sign,'block');
+        addClick(denglu,login,'block');
+        addClick(close,sign,'none');
+        addClick(closeLog,login,'none');
+
+    
+
+        
+        btn.addEventListener('click',function() {
+            var val = input.value;
+            if(val !== '') {
+                socket.emit('msg',val);
+                input.value = '';            
+            }else {
+                return;
+            }
+        })
+
+        var userman;
+        btnLog.addEventListener('click',function() {
+            var userValue = loginName.value,
+                pwdValue = loginPwd.value;
+                ajax('./login',JSON.stringify({
+                    'username': userValue,
+                    'password': pwdValue
+                }),function(text) {
+                    if(text === 'success'){
+                        alert(text);
+                        login.style.display = 'none';
+                        socket.emit('chat message',userValue);
+                    }else if(text === 'fail'){
+                        alert('fail');
+                    }
+                })
+        })
+
+
+        var socket = io();        
+
+
+        socket.on('online',function(data) {
+            online.innerText = data + '上线了';
+            setTimeout(function(){
+                online.style.display = 'none';
+            },2000)
+        })
+
+        socket.on('chat',function(data) {
+            if(data.name) {
+                var li = '<li>'+ data.name + ':' + data.val + '</li>';
+                lists.innerHTML = lists.innerHTML + li;
+            }else {
+                alert('请登录啊');
+            }
+        })
+
+
+</script>
