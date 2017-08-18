@@ -1,17 +1,15 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
-const form = require('formidable');
 const path = require('path');
-const upload = require('multer')({
-     dest: 'uploads/'
-});
-
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const formidable = require('formidable');
+
+app.use(bodyParser.text({ type: 'text/palin' }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.set('view engine','ejs');
-app.set('Content-Type','text/plain');
 app.use(express.static('./public'));
 app.get('/',(req,res) => {
     res.render('index');
@@ -19,30 +17,34 @@ app.get('/',(req,res) => {
 })
 
 
-
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Paddy',
+    password: '',
     database: 'mysql',
-    port: 3307
+    port: 3306
 })
-connection.connect();
+connection.connect(function(){
+    console.log('success');
+});
 
-app.post('/uploads',upload.single('file'),(req,res,next) => {
-    form.uploadDir = './uploads';    
-    var oldName = __dirname + '/uploads/' + req.file.filename;
-    var newName = __dirname + '/uploads/' + req.file.originalname;
-    console.log(oldName);
-    fs.rename(oldName,newName,() => {
-        console.log('success');
-        connection.query('INSERT INTO img SET image = ?',newName,function(err,results, fields) {
-            console.log('success');
+var x = 0;
+var dt = '';
+app.post('/uploads',(req,res) => {
+    console.log(req.body);
+    var data = req.body;
+    dt += data;
+    var dt = '';
+    if(x === 1){
+        connection.query('INSERT INTO img SET ?',{name: data.imgName,url: data.infor})
+    }else {
+        connection.query('SELECT url FROM img WHERE name = ?',data.imgName,(err,rows,fields) => {
+                connection.query('UPDATE img SET url = concat(url,?) WHERE name = ?',[data.infor,data.imgName])
         })
-        connection.end();
-    })
-    // res.writeHead(200,{'Content-Type':'text/plain'});
-    // res.send('success');
+    }
+    res.writeHead(200,{'Content-Type':'text/plain,charset=utf8'});
+    res.end('success');
 })
+
 
 app.listen(8080,'127.0.0.1');

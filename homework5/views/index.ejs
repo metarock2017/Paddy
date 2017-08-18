@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <!-- <link rel="stylesheet" href=""> -->
     <style>
     header {
         width: 100%;
@@ -15,7 +14,6 @@
         width:50px;
         height: 100%;
         background-color: pink;
-        /* color: pink; */
     }
     .content{
         position: absolute;
@@ -37,8 +35,9 @@
         float: right;
     }
     .sign {
-        position: relative;
-        margin: 50px auto;
+        position: absolute;
+        left: 200px;
+        top: 50px;
         width: 300px;
         height: 200px;
         display: none;
@@ -75,8 +74,9 @@
 
 
     .login {
-        position: relative;
-        margin: 50px auto;
+        position: absolute;
+        left: 200px;
+        top: 50px;
         width: 300px;
         height: 200px;
         display: none;
@@ -110,15 +110,14 @@
         text-align: center;
         line-height: 20px;
     }
-    ul {
+    .center_left ul {
         list-style: none;
-        position: absolute;
-        top: 50px;
-        left: 50px;
+        padding: 0px;
+        margin: 0px;
     }
-    ul li {
+    .center_left ul li {
         background-color: pink;
-        margin: 5px;
+        margin: 5px auto;
     }
     .online {
         position: absolute;
@@ -126,29 +125,76 @@
         left: 300px;
         overflow: hidden;
     }
+    .center {
+        width: 1400px;
+        margin-top: 50px;
+        overflow: hidden;
+    }
+    .center_left {
+        width: 300px;
+        height: 600px;
+        margin-right: 50px;
+        float: left;
+        background-color: skyblue;
+    }
+    .center_right {
+        position: relative;        
+        float: left;
+        width: 1000px;
+        height: 600px;
+        background-color: skyblue;
+    }
+    .center_right ul {
+        list-style: none;
+    }
+    
+    .center_right li {
+        margin: 10px auto;
+        width: 100%;
+        height: 30px;
+        background-color: pink;
+    }
+    .userMen {
+        margin-top: 30px;
+    }
+    .userMen {
+        top: 
+    }
     </style>
 </head>
 <body>
     <header>
         <button class='zhuce'>注册</button>
         <button class='denglu'>登陆</button>
+        <span class='you'></span>
         <span class='online'></span>
     </header>
-    <div class="sign">
-        <div><span>用户名</span><input type="text" class='username'></div>
-        <div><span>密码 : </span><input type="text" class='password'></div>
-        <button class='btnSign'>注册</button>
-        <button class="close">X</button>
+    <div class='center'>
+        <div class="center_left">
+            <ul class='userMen'>
+    
+            </ul>
+        </div>
+        <div class="center_right">
+            <div class="sign">
+                <div><span>用户名</span><input type="text" class='username'></div>
+                <div><span>密码 : </span><input type="text" class='password'></div>
+                <button class='btnSign'>注册</button>
+                <button class="close">X</button>
+            </div>
+            <div class="login">
+                    <div><span>用户名</span><input type="text" class='loginName'></div>
+                    <div><span>密码 : </span><input type="text" class='loginPwd'></div>
+                    <button class='btnLog'>登录</button>
+                    <button class="closeLog">X</button>
+            </div> 
+            <ul class='lists'>
+                    
+            </ul>
+        </div>
     </div>
-    <div class="login">
-            <div><span>用户名</span><input type="text" class='loginName'></div>
-            <div><span>密码 : </span><input type="text" class='loginPwd'></div>
-            <button class='btnLog'>登录</button>
-            <button class="closeLog">X</button>
-    </div>
-    <ul class='lists'>
+    
 
-    </ul>
     <div class="content">
         <input type="textarea" class='input'>
         <button class='btn'>点击发送</button>
@@ -193,7 +239,9 @@
         input = $('.input'),
         btn = $('.btn'),
         lists = $('.lists'),
-        online = $('.online');
+        online = $('.online'),
+        you = $('.you'),
+        userMen = $('.userMen');
 
 
     //click
@@ -249,6 +297,7 @@
                 }),function(text) {
                     if(text === 'success'){
                         alert(text);
+                        you.innerHTML = '你的名字 : ' + userValue;
                         login.style.display = 'none';
                         socket.emit('chat message',userValue);
                     }else if(text === 'fail'){
@@ -262,6 +311,7 @@
 
 
         socket.on('online',function(data) {
+            online.style.display = 'block'
             online.innerText = data + '上线了';
             setTimeout(function(){
                 online.style.display = 'none';
@@ -275,6 +325,21 @@
             }else {
                 alert('请登录啊');
             }
+        })
+
+        socket.on('users',function(data) {
+            var x = '';
+            for(var i = 0 ; i < data.length ; i++) {
+                x += '<li>' + data[i] + '</li>';
+            }
+            userMen.innerHTML = x;
+        })
+        socket.on('out',(data) => {
+            online.style.display = 'block';
+            online.innerText = data + '下线了';
+            setTimeout(function() {
+                online.display = none;
+            },2000)
         })
 
 

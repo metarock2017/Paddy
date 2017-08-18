@@ -10,53 +10,72 @@
         <input type="file" class='uploads' name='pic' id='uploadImage'>
         <img src="" class='Img'>
         <p>
-        <button class='btn'>点击上传</button>      
+        <button class='btn'>点击上传</button>     
+        <button class='stop'>点击停止</button> 
         <p>
         <progress class='pro' value='0' max='100'></progress>
 </body>
 </html>
 <script>    
 
-//日哦 自慰版的 
+
 //base64传输要崩 ajax请求一直为pending
 var pro = document.querySelector('.pro'),
     img = document.querySelector('.Img'),
     btn = document.querySelector('.btn'),
     file = document.getElementById('uploadImage'),
-    formData= new FormData();
+    stop = document.querySelector('.stop');
 
-    var curr = 0,
-        frag = 1024 * 10,
-        i = 0;
-
+    var one = 1024 * 1,
+        start = 0,
+        end = 1024 * 1;
     btn.addEventListener('click',function() {
-        if(btn.innerText == '点击上传'){
-            formData.append('file',file.files[0]);
-            ajax(formData);
-            var timer = setInterval(function() {
-            if(i < 100) {
-                i++;
-            }else {
-                clearInterval(timer);
-            }
-            pro.value = i;
-            },40)
-            btn.innerText = '点击暂停';
-        }else {
-            btn.innerText = '点击上传';
-            clearInterval(timer);
+        var reader = new FileReader(),
+        dt = file.files[0];
+        reader.onload = function(data) {
+            console.log(data.total);
+            var doc = data.target.result;
+            var total  = data.total;
+            var name = dt.name;
+            console.log(total);
+            timer = setInterval(function() {
+                if(end < total){
+                    var tmp = doc.substr(start,end);
+                     start = end;
+                     end = end + one;
+                     var json = {
+                         imgName: name,
+                         infor: tmp
+                     }
+                     ajax('./uploads',JSON.stringify(json));
+                     pro.value = end / total * 100;
+                }else{
+                    clearInterval(timer);
+                    start = 0;
+                    end = 1024;
+                    timer = null;
+                }
+            },10)
         }
- 
+        reader.readAsDataURL(dt);
     })
-    
-      
 
-    function ajax(data) {
-        var xhr = new XMLHttpRequest();
-        // xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset:utf8"); 
-        xhr.open('post','./uploads',true);
-        xhr.send(data);
+function ajax(url,data) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('post',url,true);
+    xhr.onreadystatechange = function() {
+        if(xhr.status === 200){
+            console.log(xhr.responseText);
+        }
     }
+    xhr.setRequestHeader("Content-Type","text/plain;charset=utf-8");
+    xhr.send(data);
+}
+    
+stop.addEventListener('click',function(){
+        clearInterval(timer);
+})
+
 
 </script>
 
