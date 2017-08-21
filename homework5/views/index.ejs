@@ -157,9 +157,6 @@
     .userMen {
         margin-top: 30px;
     }
-    .userMen {
-        top: 
-    }
     </style>
 </head>
 <body>
@@ -300,8 +297,8 @@
                         you.innerHTML = '你的名字 : ' + userValue;
                         login.style.display = 'none';
                         socket.emit('chat message',userValue);
-                    }else if(text === 'fail'){
-                        alert('fail');
+                    }else{
+                        alert(text);
                     }
                 })
         })

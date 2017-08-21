@@ -5,6 +5,8 @@ const io = require('socket.io')(server);
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const ejs = require('ejs');
+// const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -13,7 +15,12 @@ const connection = mysql.createConnection({
     database: 'mysql'
 })
 
-
+// app.use(cookieParser('sessiontest'));
+app.use(session({
+ secret: 'sessiontest',//与cookieParser中的一致
+ resave: true,
+ saveUninitialized:true
+}));
 
 app.set('view engine','ejs');
 app.use(express.static(__dirname + '/public'));
@@ -25,6 +32,7 @@ app.use(bodyParser.json());
 
 app.post('/sign',(req,res) => {
     console.log(req.body);
+    req.session.user = req.body;    
     let password = req.body.password,
         username = req.body.username;
     connection.query('INSERT INTO test SET ?',{username:username,password:password},(err) => {
@@ -38,6 +46,7 @@ app.post('/sign',(req,res) => {
 
 
 app.post('/login',(req,res) => {
+    console.log(req.session);
     console.log(req.body);
     let password = req.body.password,
         username = req.body.username;     
@@ -46,9 +55,13 @@ app.post('/login',(req,res) => {
             console.log(err);
         }else {
             res.writeHead(200,{'Content-Type':'text/plain'});
+            if(req.session.username){
+                res.end('你已经登陆了');
+            }
             if(!rows[0]) {
                 res.end('fail');
             }else{
+                req.session.username = username;                
                 res.end('success');
             }
         }

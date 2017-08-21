@@ -6,12 +6,8 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const formidable = require('formidable');
 
-// app.use(bodyParser.json({limit: "50mb"}));
 
-app.use(bodyParser.json({
-    keepExtensions: true,
-    limit: '500mb'
-}))
+app.use(bodyParser.json({limit: "100mb"}));
 
 app.set('view engine','ejs');
 app.use(express.static('./public'));
@@ -25,7 +21,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'mysql',
+    database: 'my_db',
     port: 3306
 })
 connection.connect(function(){
