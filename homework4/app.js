@@ -6,8 +6,12 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const formidable = require('formidable');
 
-app.use(bodyParser.text({ type: 'text/palin' }));
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json({limit: "50mb"}));
+
+app.use(bodyParser.json({
+    keepExtensions: true,
+    limit: '500mb'
+}))
 
 app.set('view engine','ejs');
 app.use(express.static('./public'));
@@ -29,12 +33,9 @@ connection.connect(function(){
 });
 
 var x = 0;
-var dt = '';
 app.post('/uploads',(req,res) => {
-    console.log(req.body);
+    x++;
     var data = req.body;
-    dt += data;
-    var dt = '';
     if(x === 1){
         connection.query('INSERT INTO img SET ?',{name: data.imgName,url: data.infor})
     }else {
