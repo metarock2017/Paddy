@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .start {
+            position: absolute;
+            background-color: #0e67a7;
+        }
+        a {
+            display: block;
+            margin: 100% 0 0 30%;
+            width: 40%;
+            height: 5%;
+            border-radius: 5px;
+            padding-top: 3%;
+            background-color: #489f2d;
+            text-align: center;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="start">
+        <a href="/game">开始游戏</a>
+    </div>
+</body>
+<script>
+    var start = document.querySelector('.start');
+    var a = document.querySelector('a');
+    var windowW = document.documentElement.clientWidth > 414 ? 414 : document.documentElement.clientWidth;
+    var windowH = document.documentElement.clientHeight > 736 ? 736 : document.documentElement.clientHeight;
+    start.style.width = windowW + 'px';
+    start.style.height = windowH + 'px';
+</script>
+</html>

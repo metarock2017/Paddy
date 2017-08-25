@@ -16,7 +16,6 @@
         //源源不断的更新管子
         this.update = function() {
             this.x--;
-            var that = this;
             if(this.x < -this.w){
                 this.h = arr[parseInt(Math.random() * len)];
                 this.y = this.allHeight - this.h;

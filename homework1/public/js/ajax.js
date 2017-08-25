@@ -1,17 +1,18 @@
 function ajax(json) {
-    var method = json.method,
+    var method = json.method || 'POST',
         url = json.url,
-        success = json.success;
+        success = json.success || '',
+        data = json.data;
 
     var xhr = new XMLHttpRequest();
-    xhr.open(method,url,'true');
+    xhr.open(method,url ,true);
     xhr.onreadystatechange = function() {
         if(xhr.readyState === 4) {
             if(xhr.status === 200) {
-                success(xhr.responseText);
+                // success(xhr.responseText);
+                console.log('success');
             }
         }
     }
-    // xhr.setRequestHeader('Content-Type','application/x-for')
-    xhr.send('hello');
+    xhr.send('point='+data);
 }

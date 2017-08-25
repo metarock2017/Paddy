@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .start {
+            position: absolute;
+            display: none;
+            background-color: #0e67a7;
+        }
+        a {
+            display: block;
+            margin: 100% 0 0 30%;
+            width: 40%;
+            height: 5%;
+            border-radius: 5px;
+            padding-top: 3%;
+            background-color: #489f2d;
+            text-align: center;
+            text-decoration: none;
+        }
+        span {
+            display: block;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="start">
+        <span class="point"></span>
+        <a href="/game">重新开始</a>
+    </div>
+    <canvas class='canvasId'></canvas>
+    <script src='js/ajax.js'></script>
+    <script src='js/img.js'></script>
+    <script src='js/background.js'></script> 
+    <script src='js/land.js'></script> 
+    <script src='js/people.js'></script> 
+    <script src='js/pipe.js'></script> 
+    <script src='js/bomb.js'></script> 
+    <script src='js/monster.js'></script> 
+    <script src='js/game.js'></script>
+    <script>
+        var poin = document.querySelector('.point');
+        var start = document.querySelector('.start');
+        var a = document.querySelector('a');
+        var windowW = document.documentElement.clientWidth > 414 ? 414 : document.documentElement.clientWidth;
+        var windowH = document.documentElement.clientHeight > 736 ? 736 : document.documentElement.clientHeight;
+        start.style.width = windowW + 'px';
+        start.style.height = windowH + 'px';
+        var game = new Game();
+    </script>
+</body>
+</html>

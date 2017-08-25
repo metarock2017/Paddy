@@ -1,13 +1,14 @@
 (function() {
-    var Bomb = window.Bomb = function(obj,x) {
+    var Bomb = window.Bomb = function(obj,y) {
         this.image = obj.img.bomb;
-        this.x = x;
-        this.y = obj.canvas.height * 0.7 - 54;
-        this.render = function() {
+        this.x = obj.llp.x + 20;
+        this.y = obj.llp.y + 20;
+        this.render = function(x,y) {
             obj.ctx.drawImage(this.image,this.x,this.y);
         }
         this.update = function() {
-            this.x++;
+            this.x += 3;
+            // this.y = y;
         }
     }
 })()
